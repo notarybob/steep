@@ -25,7 +25,7 @@ export class SettingsDialogManager {
     }
 
     removeSettings(desktop: StringDesktop): void {
-        const desktopObj =
+        let desktopObj =
             this.ctrl.desktopFactory.createDesktopFromStrings(desktop);
         this.ctrl.driverManager.removeEngineConfig(desktopObj);
         this.ctrl.dbusManager.removeSettings(desktopObj.toString());
