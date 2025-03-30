@@ -75,31 +75,31 @@ export default class HalfEngine extends TilingEngine {
             // empty root tile
             return;
         } else if (this.left.length == 0 && this.right.length > 0) {
-            for (const box of this.right) {
-                const tile = this.rootTile.addChild();
+            for (var box of this.right) {
+                var tile = this.rootTile.addChild();
                 tile.client = box.client;
                 this.tileMap.set(tile, box);
             }
         } else if (this.left.length > 0 && this.right.length == 0) {
-            for (const box of this.left) {
-                const tile = this.rootTile.addChild();
+            for (var box of this.left) {
+                var tile = this.rootTile.addChild();
                 tile.client = box.client;
                 this.tileMap.set(tile, box);
             }
         } else {
             this.rootTile.split();
-            const left = this.rootTile.tiles[0];
-            const right = this.rootTile.tiles[1];
+            var left = this.rootTile.tiles[0];
+            var right = this.rootTile.tiles[1];
 
             left.relativeSize = this.middleSplit;
             right.relativeSize = 1 - this.middleSplit;
-            for (const box of this.left) {
-                const tile = left.addChild();
+            for (var box of this.left) {
+                var tile = left.addChild();
                 tile.client = box.client;
                 this.tileMap.set(tile, box);
             }
-            for (const box of this.right) {
-                const tile = right.addChild();
+            for (var box of this.right) {
+                var tile = right.addChild();
                 tile.client = box.client;
                 this.tileMap.set(tile, box);
             }
@@ -148,16 +148,16 @@ export default class HalfEngine extends TilingEngine {
         tile: Tile,
         direction: Direction = Direction.Vertical,
     ) {
-        const clientBox = new ClientBox(client);
+        var clientBox = new ClientBox(client);
         let targetBox: BoxIndex;
-        const box = this.tileMap.get(tile);
+        var box = this.tileMap.get(tile);
         if (box == undefined) {
             this.addClient(client);
             return;
         }
         targetBox = new BoxIndex(this, box.client);
 
-        const targetArr = targetBox.left ? this.left : this.right;
+        var targetArr = targetBox.left ? this.left : this.right;
         if (direction & Direction.Up) {
             targetArr.splice(targetBox.index, 0, clientBox);
         } else {
