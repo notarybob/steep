@@ -8,7 +8,7 @@ import { Log } from "../../util/log";
 import { Config } from "../../util/config";
 import { EngineType } from "../../engine";
 
-var enum Direction {
+const enum Direction {
     Above,
     Right,
     Below,
@@ -19,10 +19,10 @@ function pointAbove(window: Window): GPoint | null {
     if (window.tile == null) {
         return null;
     }
-    var geometry = window.frameGeometry;
-    var coordOffset = 1 + window.tile.padding;
-    var x = geometry.x + 1;
-    var y = geometry.y - coordOffset;
+    const geometry = window.frameGeometry;
+    const coordOffset = 1 + window.tile.padding;
+    const x = geometry.x + 1;
+    const y = geometry.y - coordOffset;
     return new GPoint({
         x: x,
         y: y,
@@ -33,10 +33,10 @@ function pointBelow(window: Window): GPoint | null {
     if (window.tile == null) {
         return null;
     }
-    var geometry = window.frameGeometry;
-    var coordOffset = 1 + geometry.height + window.tile.padding;
-    var x = geometry.x + 1;
-    var y = geometry.y + coordOffset;
+    const geometry = window.frameGeometry;
+    const coordOffset = 1 + geometry.height + window.tile.padding;
+    const x = geometry.x + 1;
+    const y = geometry.y + coordOffset;
     return new GPoint({
         x: x,
         y: y,
@@ -47,7 +47,7 @@ function pointLeft(window: Window): GPoint | null {
     if (window.tile == null) {
         return null;
     }
-    var geometry = window.frameGeometry;
+    const geometry = window.frameGeometry;
     let coordOffset = 1 + window.tile.padding;
     let x = geometry.x - coordOffset;
     let y = geometry.y + 1;
@@ -61,7 +61,7 @@ function pointRight(window: Window): GPoint | null {
     if (window.tile == null) {
         return null;
     }
-    var geometry = window.frameGeometry;
+    const geometry = window.frameGeometry;
     let coordOffset = 1 + geometry.width + window.tile.padding;
     let x = geometry.x + coordOffset;
     let y = geometry.y + 1;
@@ -100,7 +100,7 @@ function gdirectionFromDirection(direction: Direction): GDirection {
 }
 
 function engineName(engineType: EngineType): string {
-    var engines = ["Binary Tree", "Half", "Three Column", "Monocle", "KWin"];
+    const engines = ["Binary Tree", "Half", "Three Column", "Monocle", "KWin"];
     return engines[engineType];
 }
 
@@ -192,7 +192,7 @@ export class ShortcutManager {
     }
 
     retileWindow(): void {
-        var window = this.ctrl.workspace.activeWindow;
+        const window = this.ctrl.workspace.activeWindow;
         if (window == null || !this.ctrl.windowExtensions.has(window)) {
             return;
         }
@@ -205,11 +205,11 @@ export class ShortcutManager {
     }
 
     openSettingsDialog(): void {
-        var settings = this.ctrl.qmlObjects.settings;
+        const settings = this.ctrl.qmlObjects.settings;
         if (settings.isVisible()) {
             settings.hide();
         } else {
-            var config = this.ctrl.driverManager.getEngineConfig(
+            const config = this.ctrl.driverManager.getEngineConfig(
                 this.ctrl.desktopFactory.createDefaultDesktop(),
             );
             settings.setSettings(config);
@@ -227,7 +227,7 @@ export class ShortcutManager {
     }
 
     focus(direction: Direction): void {
-        var window = this.ctrl.workspace.activeWindow;
+        const window = this.ctrl.workspace.activeWindow;
         if (window == null) {
             return;
         }
@@ -250,11 +250,11 @@ export class ShortcutManager {
     }
 
     insert(direction: Direction): void {
-        var window = this.ctrl.workspace.activeWindow;
+        const window = this.ctrl.workspace.activeWindow;
         if (window == null) {
             return;
         }
-        var point = pointInDirection(window, direction);
+        const point = pointInDirection(window, direction);
         this.logger.debug("Moving", window.resourceClass);
         this.ctrl.driverManager.untileWindow(window);
         this.ctrl.driverManager.rebuildLayout(window.output);
@@ -275,19 +275,19 @@ export class ShortcutManager {
     }
 
     resize(direction: Direction): void {
-        var window = this.ctrl.workspace.activeWindow;
+        const window = this.ctrl.workspace.activeWindow;
         if (window == null || window.tile == null) {
             return;
         }
-        var tile = window.tile;
-        var resizeAmount = this.config.resizeAmount;
+        const tile = window.tile;
+        const resizeAmount = this.config.resizeAmount;
         // dont change size for root tile
         if (tile.parent == null) {
             return;
         }
         // kwin shouldnt nest tiles so no need to bubble up hopefully
-        var siblingCount = tile.parent.tiles.length;
-        var indexOfTile = tile.parent.tiles.indexOf(tile);
+        const siblingCount = tile.parent.tiles.length;
+        const indexOfTile = tile.parent.tiles.indexOf(tile);
         // should auto trigger the resize callback
         this.logger.debug("Changing size of", tile.absoluteGeometry);
         switch (direction) {
@@ -324,16 +324,16 @@ export class ShortcutManager {
     }
 
     setEngine(engineType: EngineType): void {
-        var desktop = this.ctrl.desktopFactory.createDefaultDesktop();
-        var engineConfig = this.ctrl.driverManager.getEngineConfig(desktop);
+        const desktop = this.ctrl.desktopFactory.createDefaultDesktop();
+        const engineConfig = this.ctrl.driverManager.getEngineConfig(desktop);
         engineConfig.engineType = engineType;
         this.ctrl.qmlObjects.osd.show(engineName(engineType));
         this.ctrl.driverManager.setEngineConfig(desktop, engineConfig);
     }
 
     cycleEngine(): void {
-        var desktop = this.ctrl.desktopFactory.createDefaultDesktop();
-        var engineConfig = this.ctrl.driverManager.getEngineConfig(desktop);
+        const desktop = this.ctrl.desktopFactory.createDefaultDesktop();
+        const engineConfig = this.ctrl.driverManager.getEngineConfig(desktop);
         let engineType = engineConfig.engineType;
         engineType += 1;
         engineType %= EngineType._loop;
@@ -343,8 +343,8 @@ export class ShortcutManager {
     }
 
     rotateLayout(): void {
-        var desktop = this.ctrl.desktopFactory.createDefaultDesktop();
-        var engineConfig = this.ctrl.driverManager.getEngineConfig(desktop);
+        const desktop = this.ctrl.desktopFactory.createDefaultDesktop();
+        const engineConfig = this.ctrl.driverManager.getEngineConfig(desktop);
         engineConfig.rotateLayout = !engineConfig.rotateLayout;
         this.ctrl.qmlObjects.osd.show("Rotate Layout: " + engineConfig.rotateLayout);
         this.ctrl.driverManager.setEngineConfig(desktop, engineConfig);
