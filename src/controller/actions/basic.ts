@@ -18,7 +18,7 @@ export class WorkspaceActions {
 
     // done later after loading
     addHooks(): void {
-        const workspace = this.ctrl.workspace;
+        let workspace = this.ctrl.workspace;
         workspace.windowAdded.connect(this.windowAdded.bind(this));
         workspace.windowRemoved.connect(this.windowRemoved.bind(this));
         workspace.currentActivityChanged.connect(
@@ -40,12 +40,12 @@ export class WorkspaceActions {
                 return false;
             }
             // check if caption/resourceclass is substring as well
-            for (const s of this.config.filterProcess) {
+            for (let s of this.config.filterProcess) {
                 if (s.length > 0 && c.resourceClass.includes(s)) {
                     return false;
                 }
             }
-            for (const s of this.config.filterCaption) {
+            for (let s of this.config.filterCaption) {
                 if (s.length > 0 && c.caption.includes(s)) {
                     return false;
                 }
@@ -88,7 +88,7 @@ export class WorkspaceActions {
         // have to set this because this function temp untiles all windows
         this.ctrl.driverManager.buildingLayout = true;
         // set geometry for all clients manually to avoid resizing when tiles are deleted
-        for (const window of this.ctrl.workspace.windows) {
+        for (let window of this.ctrl.workspace.windows) {
             if (
                 window.tile != null &&
                 window.activities.includes(
@@ -98,7 +98,7 @@ export class WorkspaceActions {
                     this.ctrl.workspaceExtensions.lastDesktop,
                 )
             ) {
-                const tile = window.tile;
+                let tile = window.tile;
                 window.tile = null;
                 window.frameGeometry = tile.absoluteGeometry;
                 window.frameGeometry.width -= 2 * tile.padding;
@@ -114,7 +114,7 @@ export class WorkspaceActions {
         // _window is null??? kwin fix your api
         if (this.config.borders == Borders.Selected && window != null) {
             window.noBorder = false;
-            const lastActiveWindow =
+            let lastActiveWindow =
                 this.ctrl.workspaceExtensions.lastActiveWindow;
             if (
                 lastActiveWindow != null &&
