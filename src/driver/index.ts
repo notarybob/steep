@@ -30,7 +30,7 @@ export class DriverManager {
     }
 
     init(): void {
-        const c = this.ctrl;
+        var c = this.ctrl;
         c.workspace.screensChanged.connect(this.generateDrivers.bind(this));
         c.workspace.desktopsChanged.connect(this.generateDrivers.bind(this));
         c.workspace.activitiesChanged.connect(this.generateDrivers.bind(this));
@@ -40,13 +40,13 @@ export class DriverManager {
     private generateDrivers(): void {
         // all drivers get pre generated now, no lazy loading
         // also handles driver regeneration on screen/layout changes
-        const currentDesktops: string[] = [];
-        for (const desktop of this.drivers.keys()) {
+        var currentDesktops: string[] = [];
+        for (var desktop of this.drivers.keys()) {
             currentDesktops.push(desktop);
         }
-        for (const desktop of this.ctrl.desktopFactory.createAllDesktops()) {
-            const desktopString = desktop.toString();
-            const index = currentDesktops.indexOf(desktopString);
+        for (var desktop of this.ctrl.desktopFactory.createAllDesktops()) {
+            var desktopString = desktop.toString();
+            var index = currentDesktops.indexOf(desktopString);
             if (index == -1) {
                 // create new desktop
                 this.logger.debug(
@@ -60,14 +60,14 @@ export class DriverManager {
                     this.logger.debug("Auto rotate layout for desktop", desktopString);
                     rotateLayout = !rotateLayout;
                 }
-                const config: EngineConfig = {
+                var config: EngineConfig = {
                     engineType: engineType,
                     insertionPoint: this.config.insertionPoint,
                     rotateLayout: rotateLayout,
                     engineSettings: {},
                 };
-                const engine = this.engineFactory.newEngine(config);
-                const driver = new TilingDriver(
+                var engine = this.engineFactory.newEngine(config);
+                var driver = new TilingDriver(
                     engine,
                     engineType,
                     this.ctrl,
@@ -83,13 +83,13 @@ export class DriverManager {
             }
         }
         // remove engines for desktops that no longer exist
-        for (const desktop of currentDesktops) {
+        for (var desktop of currentDesktops) {
             this.drivers.delete(desktop);
         }
         // remove tiles that dont exist
-        for (const tile of this.rootTileCallbacks.keys()) {
+        for (var tile of this.rootTileCallbacks.keys()) {
             let remove = true;
-            for (const output of this.ctrl.workspace.screens) {
+            for (var output of this.ctrl.workspace.screens) {
                 if (
                     this.ctrl.workspace.tilingForScreen(output).rootTile == tile
                 ) {
@@ -103,14 +103,14 @@ export class DriverManager {
             }
         }
         // register tiles that do exist
-        for (const output of this.ctrl.workspace.screens) {
-            const rootTile =
+        for (var output of this.ctrl.workspace.screens) {
+            var rootTile =
                 this.ctrl.workspace.tilingForScreen(output).rootTile;
             if (this.ctrl.managedTiles.has(rootTile)) {
                 continue;
             }
             this.ctrl.managedTiles.add(rootTile);
-            const timer = this.ctrl.qmlObjects.root.createTimer();
+            var timer = this.ctrl.qmlObjects.root.createTimer();
             timer.interval = this.config.timerDelay;
             timer.triggered.connect(
                 this.layoutModifiedCallback.bind(this, rootTile, output),
@@ -128,7 +128,7 @@ export class DriverManager {
             return;
         }
         this.resizingLayout = true;
-        const timer = this.rootTileCallbacks.get(tile);
+        var timer = this.rootTileCallbacks.get(tile);
         if (timer == undefined) {
             this.logger.error(
                 "Callback not registered for root tile",
@@ -141,12 +141,12 @@ export class DriverManager {
 
     private layoutModifiedCallback(tile: Tile, output: Output): void {
         this.logger.debug("Layout modified for tile", tile.absoluteGeometry);
-        const desktop = new Desktop(
+        var desktop = new Desktop(
             this.ctrl.workspace.currentDesktop,
             this.ctrl.workspace.currentActivity,
             output,
         );
-        const driver = this.drivers.get(desktop.toString())!;
+        var driver = this.drivers.get(desktop.toString())!;
         driver.regenerateLayout(tile);
         if (this.config.saveOnTileEdit) {
             this.ctrl.dbusManager.setSettings(
@@ -178,7 +178,7 @@ export class DriverManager {
     }
 
     private applyUntiled(window: Window): void {
-        const extensions = this.ctrl.windowExtensions.get(window)!;
+        var extensions = this.ctrl.windowExtensions.get(window)!;
         extensions.isTiled = false;
         extensions.isSingleMaximized = false;
         if (this.config.keepTiledBelow) {
@@ -207,10 +207,10 @@ export class DriverManager {
             ];
         }
         this.logger.debug("Rebuilding layout for desktops", desktops);
-        for (const desktop of desktops) {
-            const driver = this.drivers.get(desktop.toString())!;
+        for (var desktop of desktops) {
+            var driver = this.drivers.get(desktop.toString())!;
             // move this above to correctly set isTiled
-            for (const window of driver.clients.keys()) {
+            for (var window of driver.clients.keys()) {
                 if (!driver.untiledWindows.includes(window)) {
                     this.applyTiled(window);
                 }
@@ -219,8 +219,8 @@ export class DriverManager {
                 this.ctrl.workspace.tilingForScreen(desktop.output).rootTile,
             );
             // make registered "untiled" clients appear untiled
-            for (const window of driver.untiledWindows) {
-                const extensions = this.ctrl.windowExtensions.get(window)!;
+            for (var window of driver.untiledWindows) {
+                var extensions = this.ctrl.windowExtensions.get(window)!;
                 // shouldve already done this if isTiled is already false?
                 if (!extensions.isTiled) {
                     continue;
@@ -232,7 +232,7 @@ export class DriverManager {
                     fullscreen = true;
                 }
                 // maxmimized
-                const wasSingleMaximized = extensions.isSingleMaximized;
+                var wasSingleMaximized = extensions.isSingleMaximized;
                 this.applyUntiled(window);
                 window.tile = null;
                 if (wasSingleMaximized) {
@@ -257,7 +257,7 @@ export class DriverManager {
             "on desktops",
             desktops,
         );
-        for (const desktop of desktops) {
+        for (var desktop of desktops) {
             this.drivers.get(desktop.toString())!.untileWindow(window);
         }
     }
@@ -273,7 +273,7 @@ export class DriverManager {
             "to desktops",
             desktops,
         );
-        for (const desktop of desktops) {
+        for (var desktop of desktops) {
             this.drivers.get(desktop.toString())!.addWindow(window);
         }
     }
@@ -289,13 +289,13 @@ export class DriverManager {
             "from desktops",
             desktops,
         );
-        for (const desktop of desktops) {
+        for (var desktop of desktops) {
             this.drivers.get(desktop.toString())!.removeWindow(window);
         }
     }
 
     putWindowInTile(window: Window, tile: Tile, direction?: Direction) {
-        const desktop = this.ctrl.desktopFactory.createDefaultDesktop();
+        var desktop = this.ctrl.desktopFactory.createDefaultDesktop();
         desktop.output = window.output;
         this.logger.debug(
             "Putting client",
@@ -319,7 +319,7 @@ export class DriverManager {
 
     setEngineConfig(desktop: Desktop, config: EngineConfig) {
         this.logger.debug("Setting engine config for desktop", desktop);
-        const driver = this.drivers.get(desktop.toString())!;
+        var driver = this.drivers.get(desktop.toString())!;
         driver.engineConfig = config;
         this.ctrl.dbusManager.setSettings(
             desktop.toString(),
@@ -330,7 +330,7 @@ export class DriverManager {
 
     removeEngineConfig(desktop: Desktop): void {
         this.logger.debug("Removing engine config for desktop", desktop);
-        const config: EngineConfig = {
+        var config: EngineConfig = {
             engineType: this.config.engineType,
             insertionPoint: this.config.insertionPoint,
             rotateLayout: this.config.rotateLayout,
