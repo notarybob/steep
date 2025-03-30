@@ -20,7 +20,7 @@ export default class MonocleEngine extends TilingEngine {
 
     buildLayout() {
         this.rootTile = new Tile();
-        for (const client of this.clients) {
+        for (let client of this.clients) {
             this.rootTile.clients.push(client);
         }
     }
@@ -38,7 +38,7 @@ export default class MonocleEngine extends TilingEngine {
     }
 
     removeClient(client: Client) {
-        const index = this.clients.indexOf(client);
+        let index = this.clients.indexOf(client);
         if (index >= 0) {
             this.clients.splice(index, 1);
         }
@@ -64,7 +64,7 @@ export default class MonocleEngine extends TilingEngine {
             this.clients.push(client);
         } else {
             // cycle backwards, bring the window in the last position to the front
-            const lastClient = this.clients.pop();
+            let lastClient = this.clients.pop();
             if (lastClient == undefined) {
                 // empty array so order doesnt matter anyways
                 this.clients.push(client);
