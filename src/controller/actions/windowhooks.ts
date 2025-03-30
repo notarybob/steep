@@ -35,23 +35,23 @@ export class WindowHooks {
             "Desktops changed for window",
             this.window.resourceClass,
         );
-        var currentDesktops =
+        const currentDesktops =
             this.ctrl.desktopFactory.createDesktopsFromWindow(this.window);
-        var removeDesktops = [];
-        var currentDesktopStrings = currentDesktops.map((desktop) =>
+        const removeDesktops = [];
+        const currentDesktopStrings = currentDesktops.map((desktop) =>
             desktop.toString(),
         );
-        for (var desktop of this.extensions.previousDesktops) {
+        for (const desktop of this.extensions.previousDesktops) {
             if (!currentDesktopStrings.includes(desktop.toString())) {
                 removeDesktops.push(desktop);
             }
         }
         this.ctrl.driverManager.removeWindow(this.window, removeDesktops);
-        var addDesktops = [];
-        var previousDesktopStrings = this.extensions.previousDesktops.map(
+        const addDesktops = [];
+        const previousDesktopStrings = this.extensions.previousDesktops.map(
             (desktop) => desktop.toString(),
         );
-        for (var desktop of currentDesktops) {
+        for (const desktop of currentDesktops) {
             if (!previousDesktopStrings.includes(desktop.toString())) {
                 addDesktops.push(desktop);
             }
@@ -77,7 +77,7 @@ export class WindowHooks {
                 "in tile",
                 tile!.absoluteGeometry,
             );
-            var direction = new GRect(
+            const direction = new GRect(
                 tile.absoluteGeometry,
             ).directionFromPoint(this.ctrl.workspace.cursorPos);
             this.ctrl.driverManager.putWindowInTile(
@@ -94,7 +94,7 @@ export class WindowHooks {
                 this.window.resourceClass,
                 "moved into an unmanaged tile",
             );
-            var center = new GRect(tile.absoluteGeometryInScreen).center;
+            const center = new GRect(tile.absoluteGeometryInScreen).center;
             let newTile = this.ctrl.workspace
                 .tilingForScreen(this.window.output)
                 .bestTileForPosition(center.x, center.y);
@@ -130,12 +130,12 @@ export class WindowHooks {
             return;
         }
         // need to use this to check if still in tile because kwin doesnt update it for us anymore
-        var inOldTile =
+        const inOldTile =
             this.window.tile != null &&
             new GRect(this.window.tile.absoluteGeometry).contains(
                 this.window.frameGeometry,
             );
-        var inUnmanagedTile =
+        const inUnmanagedTile =
             this.window.tile != null &&
             !this.ctrl.managedTiles.has(this.window.tile);
         // client is moved out of a managed tile and into no tile
@@ -236,7 +236,7 @@ export class WindowHooks {
     }
 
     maximizedChanged(mode: MaximizeMode) {
-        var maximized = mode == MaximizeMode.MaximizeFull;
+        const maximized = mode == MaximizeMode.MaximizeFull;
         this.extensions.maximized = maximized;
         // ignore if the driver is making windows maximized
         if (this.ctrl.driverManager.buildingLayout) {
@@ -278,7 +278,7 @@ export class WindowHookManager {
     }
 
     attachWindowHooks(window: Window): void {
-        var extensions = this.ctrl.windowExtensions.get(window)!;
+        const extensions = this.ctrl.windowExtensions.get(window)!;
         if (extensions.clientHooks != null) {
             return;
         }
