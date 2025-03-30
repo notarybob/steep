@@ -3,13 +3,13 @@
 import { EngineType } from "../engine";
 import { KWin } from "kwin-api/qml";
 
-export const enum InsertionPoint {
+export var enum InsertionPoint {
     Left = 0,
     Right,
     Active,
 }
 
-export const enum Borders {
+export var enum Borders {
     NoAll,
     NoTiled,
     Selected,
