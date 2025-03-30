@@ -16,7 +16,7 @@ export class Log {
         if (this.printFn == undefined) {
             return;
         }
-        let ret = opener;
+        const ret = opener;
         for (var s of stuff) {
             ret += " ";
             if (s === null) {
