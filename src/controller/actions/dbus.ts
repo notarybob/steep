@@ -16,7 +16,7 @@ export class DBusManager {
 
     constructor(ctrl: Controller) {
         this.logger = ctrl.logger;
-        var dbus = ctrl.qmlObjects.dbus;
+        const dbus = ctrl.qmlObjects.dbus;
 
         this.existsCall = dbus.getExists();
         this.getSettingsCall = dbus.getGetSettings();
@@ -52,7 +52,7 @@ export class DBusManager {
         if (!this.isConnected) {
             return;
         }
-        var stringConfig = JSON.stringify(config);
+        const stringConfig = JSON.stringify(config);
         this.logger.debug(
             "Setting settings over dbus for desktop",
             desktop,
