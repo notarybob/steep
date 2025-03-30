@@ -17,7 +17,7 @@ export class Log {
             return;
         }
         let ret = opener;
-        for (const s of stuff) {
+        for (var s of stuff) {
             ret += " ";
             if (s === null) {
                 ret += "null";
