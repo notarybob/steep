@@ -41,7 +41,7 @@ class TreeNode {
         // if sibling has children, move them to the parent and leave both siblings to be garbage collected
         if (this.sibling.children != null) {
             this.parent.children = this.sibling.children;
-            for (var child of this.parent.children) {
+            for (const child of this.parent.children) {
                 // help the adoption
                 child.parent = this.parent;
             }
@@ -91,8 +91,8 @@ export default class BTreeEngine extends TilingEngine {
         queue.enqueue(this.rootNode);
         this.nodeMap.set(this.rootNode, this.rootTile);
         while (queue.size > 0) {
-            var node = queue.dequeue()!;
-            var tile = this.nodeMap.get(node)!;
+            const node = queue.dequeue()!;
+            const tile = this.nodeMap.get(node)!;
 
             if (node.client != null) {
                 tile.client = node.client;
@@ -116,7 +116,7 @@ export default class BTreeEngine extends TilingEngine {
         let queue: Queue<TreeNode> = new Queue();
         queue.enqueue(this.rootNode);
         while (queue.size > 0) {
-            var node = queue.dequeue()!;
+            const node = queue.dequeue()!;
             if (node.children == null) {
                 if (node.client != null) {
                     node.split();
@@ -133,11 +133,11 @@ export default class BTreeEngine extends TilingEngine {
                 }
                 return;
             } else {
-                var children = Array.from(node.children);
+                const children = Array.from(node.children);
                 if (this.config.insertionPoint == InsertionPoint.Right) {
                     children.reverse();
                 }
-                for (var child of children) {
+                for (const child of children) {
                     queue.enqueue(child);
                 }
             }
@@ -149,23 +149,23 @@ export default class BTreeEngine extends TilingEngine {
         queue.enqueue(this.rootNode);
         let deleteQueue: TreeNode[] = [];
         while (queue.size > 0) {
-            var node = queue.dequeue()!;
+            const node = queue.dequeue()!;
             if (node.client == client) {
                 deleteQueue.push(node);
             }
             if (node.children != null) {
-                for (var child of node.children) {
+                for (const child of node.children) {
                     queue.enqueue(child);
                 }
             }
         }
-        for (var node of deleteQueue) {
+        for (const node of deleteQueue) {
             node.remove();
         }
     }
 
     putClientInTile(client: Client, tile: Tile, direction?: Direction) {
-        var node = this.nodeMap.inverse.get(tile);
+        const node = this.nodeMap.inverse.get(tile);
         if (node == undefined) {
             // usually means there are no other tiles in the layout
             this.addClient(client);
@@ -203,8 +203,8 @@ export default class BTreeEngine extends TilingEngine {
 
     regenerateLayout() {
         // just for checking resizing mostly
-        for (var node of this.nodeMap.keys()) {
-            var tile = this.nodeMap.get(node)!;
+        for (const node of this.nodeMap.keys()) {
+            const tile = this.nodeMap.get(node)!;
             if (tile.tiles.length == 2) {
                 node.sizeRatio = tile.tiles[0].relativeSize;
             }
