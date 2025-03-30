@@ -3,7 +3,7 @@
 import { QPoint, QRect, QSize } from "kwin-api/qt";
 
 // direction uses up/right for quadrant of direction and vertical for whether the point is leaning vertically or horizontally along the y = +-x split
-export const enum Direction {
+export var enum Direction {
     None = 0,
     Up = 1 << 0,
     Right = 1 << 1,
@@ -114,7 +114,7 @@ export class GRect implements QRect {
 
     directionFromPoint(p: QPoint): Direction {
         // very complex, copied this in from old polonium
-        const relativePoint = new GPoint({
+        var relativePoint = new GPoint({
             x: p.x - this.x,
             y: p.y - this.y,
         });
