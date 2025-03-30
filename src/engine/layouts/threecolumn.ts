@@ -28,7 +28,7 @@ class BoxIndex {
 
     constructor(engine: ThreeColumnEngine, client: Client) {
         for (let i = 0; i < engine.rows.length; i += 1) {
-            const row = engine.rows[i];
+            var row = engine.rows[i];
             for (let j = 0; j < row.length; j += 1) {
                 if (row[j].client == client) {
                     this.index = j;
@@ -78,11 +78,11 @@ export default class ThreeColumnEngine extends TilingEngine {
             middleSize -= this.leftSize;
         }
         for (let i = 0; i < this.rows.length; i += 1) {
-            const row = this.rows[i];
+            var row = this.rows[i];
             if (row.length == 0) {
                 continue;
             }
-            const rowRoot = this.rootTile.addChild(false);
+            var rowRoot = this.rootTile.addChild(false);
             if (i == 0) {
                 rowRoot.relativeSize = this.leftSize;
             } else if (i == 1) {
@@ -90,8 +90,8 @@ export default class ThreeColumnEngine extends TilingEngine {
             } else {
                 rowRoot.relativeSize = this.rightSize;
             }
-            for (const box of row) {
-                const tile = rowRoot.addChild();
+            for (var box of row) {
+                var tile = rowRoot.addChild();
                 tile.client = box.client;
                 this.tileMap.set(tile, box);
             }
@@ -125,20 +125,20 @@ export default class ThreeColumnEngine extends TilingEngine {
         } catch (e) {
             throw e;
         }
-        const row = this.rows[box.row];
+        var row = this.rows[box.row];
         row.splice(box.index, 1);
     }
 
     putClientInTile(client: Client, tile: Tile, direction?: Direction) {
-        const clientBox = new ClientBox(client);
+        var clientBox = new ClientBox(client);
         let targetBox: BoxIndex;
-        const box = this.tileMap.get(tile);
+        var box = this.tileMap.get(tile);
         if (box == undefined) {
             this.addClient(client);
             return;
         }
         targetBox = new BoxIndex(this, box.client);
-        const targetArr = this.rows[targetBox.row];
+        var targetArr = this.rows[targetBox.row];
         if (direction == null || direction & Direction.Up) {
             targetArr.splice(targetBox.index, 0, clientBox);
         } else {
